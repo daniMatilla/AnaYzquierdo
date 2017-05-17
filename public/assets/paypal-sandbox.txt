@@ -1,0 +1,3 @@
+paypal credential 6 de mayo del 2017
+  'client_id' => 'ASDArmkRO_7hr-K-uTTFm2_5GCyJE8hBGx9sXZoojslIsPAr9TiHEvpu7mjtZ2XjThXdIAVg9JqxO6Og',
+  'secret'    => 'EDnZVcxG9rFQhkqv36vqTbhsTwQBlYFVLXIjw-Lb_7_h9zW6ssMDvlPz7a9zXTFXgAtOEinxTFFzm7pM',
