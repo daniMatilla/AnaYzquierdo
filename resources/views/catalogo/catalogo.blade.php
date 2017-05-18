@@ -1,7 +1,7 @@
 @extends('layouts.maestra')
 @section('title', 'Catalogo')
 @section('content')
-  <div class="row">
+  <div class="row contenido-catalogo">
     @foreach( $obras as $obra )
     <div class="col s12 m6 l4">
       <div class="card small hoverable sticky-action">
