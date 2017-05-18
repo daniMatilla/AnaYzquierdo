@@ -1,18 +1,19 @@
 @extends('layouts.maestra')
 @section('title', 'Admin. Pedidos')
 @section('content')
-<div id="modal-alert-estado-pedido" class="modal">
-  <div class="modal-content center-align">
+  <div id="modal-alert-estado-pedido" class="modal">
+    <div class="modal-content center-align">
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-teal btn-flat">Aceptar</a>
+    </div>
   </div>
-  <div class="modal-footer">
-    <a href="#!" class="modal-action modal-close waves-effect waves-teal btn-flat">Aceptar</a>
-  </div>
-</div>
-<div class="row">
-  <table class="pedidos responsive-table highlight bordered">
-    <thead>
+
+  <div class="row contenido-admin-pedidos">
+    <table id="tabla-admin-pedidos" class="pedidos responsive-table highlight bordered">
+      <thead>
       <tr>
-        <th>Ver detalle</th>
+        <th>Ver</th>
         <th>ID</th>
         <th>Cliente</th>
         <th>Fecha Alta</th>
@@ -22,11 +23,11 @@
         <th>Total</th>
         <th>Estado</th>
       </tr>
-    </thead>
-    <tbody id=tbodyPedidos>
-      @section('cuerpoTabla')      
+      </thead>
+      <tbody id=tbodyPedidos>
+      @section('cuerpoTabla')
       @show
-    </tbody>
-  </table>  
-</div>
+      </tbody>
+    </table>
+  </div>
 @endsection
