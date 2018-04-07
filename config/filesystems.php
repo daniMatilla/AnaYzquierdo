@@ -55,12 +55,6 @@ return [
       'url'    => 'images/obras',
     ],
 
-    'avatars' => [
-      'driver' => 'local',
-      'root'   => public_path(),
-      'url'    => 'images/avatars',
-    ],
-
   ],
 
 ];

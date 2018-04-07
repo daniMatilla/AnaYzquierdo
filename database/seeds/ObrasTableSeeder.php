@@ -13,8 +13,8 @@ class ObrasTableSeeder extends Seeder {
 		// Borramos los datos de la tabla
 		DB::table('obras')->delete();
 
-		// Creamos obras aleatoriamente, 10 obras
-		factory('anayzquierdo\Obra', 10)->create();
+		// Creamos obras aleatoriamente, 49 obras
+		factory('anayzquierdo\Obra', 49)->create();
 		
 		$this->command->info('Tabla obras inicializada con datos!');
 	}

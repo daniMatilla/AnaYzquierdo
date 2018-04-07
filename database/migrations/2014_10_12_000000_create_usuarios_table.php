@@ -29,6 +29,7 @@ class CreateUsuariosTable extends Migration {
       $table->boolean('activo')->default(false);
       $table->boolean('bloqueado')->default(false);
       $table->string('confirm_token', 100);
+      $table->string('saludo', 191)->nullable()->default('anayzquierdo.com');
       $table->rememberToken();
       $table->timestamps();
     });

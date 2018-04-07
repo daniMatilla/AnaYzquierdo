@@ -25,17 +25,19 @@ Route::get('/', 'CatalogoController@getBienvenida')->name('home')->middleware('u
 Route::group(['prefix' => 'catalogo/'], function () {
   // Catálogo y bienvenida son la misma página
   Route::get('', 'CatalogoController@getBienvenida');
-  // Redirecciones a bienvenida en rutas mal formadas
-  Route::get('ver', 'CatalogoController@getBienvenida');
-  Route::get('editar', 'CatalogoController@getBienvenida');
   // VER OBRA
   Route::get('ver/{titulo_obra}', 'CatalogoController@getVer')->name('ver-obra');
   // NUEVA OBRA
   Route::get('nueva', 'CatalogoController@getNueva')->middleware('admin');
-  Route::post('nueva', 'CatalogoController@postNueva')->middleware('admin');
+  Route::post('nueva', 'CatalogoController@postNueva')
+    ->name('nueva-obra')->middleware('admin');
   // EDITAR OBRA
-  Route::get('editar/{titulo_obra}', 'CatalogoController@getEditar')->middleware('admin');
-  Route::put('editar/{titulo_obra}', 'CatalogoController@putEditar')->middleware('admin');
+  Route::get('editar/{titulo_obra}', 'CatalogoController@getEditar')
+    ->name('editar-obra')->middleware('admin');
+  Route::post('editar/{titulo_obra}', 'CatalogoController@postEditarEtiquetas')
+    ->name('editar-obra')->middleware('admin');
+  Route::put('editar/{titulo_obra}', 'CatalogoController@putEditar')
+    ->name('editar-obra')->middleware('admin');
 });
 
 /* REGISTRO */
@@ -48,6 +50,10 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
+
+/* REENVIO EMAIL CONFIRMACION */
+Route::get('activacion', 'Auth\RegisterController@getActivacion')->name('activacion');
+Route::post('activacion', 'Auth\RegisterController@postActivacion');
 
 /* CONFIRMACIÓN DE USUARIO */
 Route::get('auth/confirm/email/{email}/confirm_token/{confirm_token}', 'Auth\RegisterController@confirmRegister');
@@ -85,6 +91,8 @@ Route::get('usuario', 'UsuarioController@getUsuario')
   ->name('panel-usuario')->middleware('auth');
 Route::put('usuario', 'UsuarioController@putUsuario')
   ->name('panel-usuario')->middleware('auth');
+Route::get('usuario_detalle_pedido/{id}', 'UsuarioController@getDetallePedido')
+  ->name('usuario-detalle-pedido')->middleware('auth');
 
 /* PANEL DE ADMINISTRACION */
 // Administración de usuarios
@@ -100,3 +108,26 @@ Route::get('admin-pedidos', 'AdministradorController@getPedidosAdmin')
   ->name('panel-admin-pedidos')->middleware('admin');
 Route::post('estado_pedido/{id}', 'AdministradorController@modificarEstadoPedido')
   ->name('estado-pedido')->middleware('admin');
+Route::get('admin_detalle_pedido/{id}', 'AdministradorController@getDetallePedido')
+  ->name('admin-detalle-pedido')->middleware('admin');
+
+// Administración de obras
+Route::get('admin-obras', 'AdministradorController@getObrasAdmin')
+  ->name('panel-admin-obras')->middleware('admin');
+Route::post('eliminar_obra/{id}', 'AdministradorController@eliminarObra')
+  ->name('eliminar-obra')->middleware('admin');
+
+// Administración de etiquetas
+Route::get('admin-etiquetas', 'AdministradorController@getEtiquetasAdmin')
+  ->name('panel-admin-etiquetas')->middleware('admin');
+Route::post('eliminar_etiqueta/{id}', 'AdministradorController@eliminarEtiqueta')
+  ->name('eliminar-etiqueta')->middleware('admin');
+
+/* ETIQUETAS */
+// Mostrar obras relacionadas
+Route::get('obra-relacionadas/{nombre_etiqueta}', 'EtiquetasController@getObras')
+  ->name('obras-realcionadas');
+
+/* CONTACTO */
+Route::get('contacto', 'ContactoController@getContacto')->name('contacto');
+Route::post('contacto', 'ContactoController@postContacto');

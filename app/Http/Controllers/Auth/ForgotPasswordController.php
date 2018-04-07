@@ -6,6 +6,7 @@ use anayzquierdo\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
+use Validator;
 
 class ForgotPasswordController extends Controller {
   /*
@@ -31,6 +32,7 @@ class ForgotPasswordController extends Controller {
   }
 
   public function sendResetLinkEmail(Request $request) {
+
     $message = [
       'email.required' => 'El campo es requerido',
       'email.email'    => 'El formato de email es incorrecto',
@@ -57,6 +59,6 @@ class ForgotPasswordController extends Controller {
    * @return \Illuminate\Http\RedirectResponse
    */
   protected function sendResetLinkResponse($response) {
-    return back()->with('status', 'Hemos enviado un link a tu cuenta de correo para resetear el password');
+    return redirect()->route('home')->with('status', 'Hemos enviado un link a tu cuenta de correo para resetear el password');
   }
 }

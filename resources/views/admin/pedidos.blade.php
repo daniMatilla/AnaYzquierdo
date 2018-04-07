@@ -1,5 +1,5 @@
 @extends('layouts.maestra')
-@section('title', 'Admin. Pedidos')
+@section('title', 'Admin.&nbsp;Pedidos')
 @section('content')
   <div id="modal-alert-estado-pedido" class="modal">
     <div class="modal-content center-align">
@@ -28,6 +28,7 @@
       @section('cuerpoTabla')
       @show
       </tbody>
-    </table>
+    </table>    
+    @include('parciales.paginacion')
   </div>
 @endsection

@@ -1,13 +1,6 @@
-/*html {*/
-/*font-size:62.5%;*/
-/*}*/
-/*body{*/
-/*font-size: 10px;*/
-/*}*/
-
 /* NAV **********************/
-#logo span {
-  position: relative;
+#logo span, .parallax-container h1 span {
+  position: absolute;
   left: -3000px;
 }
 
@@ -23,7 +16,7 @@ nav {
   min-width: 150px !important;
 }
 
-/*HEADER **********************/
+/* HEADER **********************/
 .header {
   font-weight: 300;
 }
@@ -51,6 +44,14 @@ body {
   min-height: 100vh;
   flex-direction: column;
 }
+noscript{
+  position: absolute;
+  width: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: teal;
+  color: white;
+}
 
 main {
   flex: 1 0 auto;
@@ -60,9 +61,24 @@ h1 {
   font-weight: 400;
 }
 
+footer .collapsible-body p:nth-child(odd){
+  padding: .5rem;
+}
+
+footer .collapsible-body p:nth-child(even){
+  font-size: 1.2rem;
+  padding-left: 2rem;
+}
+
 #bienvenida h1, #ver h1 {
   text-shadow: 0px 3px 6px black;
+}
 
+.emoji{
+  height: 2rem !important;
+  margin: 0 0 0 .7rem !important;
+  background: none !important;
+  padding: 0 !important;
 }
 
 /*CATALOGO **********************/
@@ -71,11 +87,11 @@ h1 {
 }
 
 .contenido {
-  height: 100vh;
+  height: 100%;
 }
 
 .contenido-catalogo {
-  padding-top: 10rem !important;
+  padding-top: 16rem !important; 
 }
 
 .contenido-admin-usuarios {
@@ -99,9 +115,9 @@ h1 {
   bottom: 10px !important;
 }
 
-.card-title:hover, .card a:hover {
+.card a:hover {
   color: teal !important;
-  font-weight: bold;
+  /*font-weight: bold;*/
 }
 
 .card a {
@@ -119,14 +135,20 @@ h1 {
   padding-top: 40px !important;
 }
 
-.card-reveal i:hover {
-  color: white;
-  font-size: 105%;
+.card-reveal span:hover {
+  cursor: auto;
 }
 
-.halfway-fab {
-  right: 10px !important;
-  bottom: 10px !important;
+.halfway-fab-catalogo{  
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+}
+
+.halfway-fab-obra {
+  position: absolute;
+  right: 10px;
+  top: -20px;
 }
 
 #miniatura {
@@ -136,11 +158,11 @@ h1 {
   max-width: 150px;
 }
 
-#vendida {
-  position: absolute;
+.vendida-catalogo {
   top: 10px;
   right: 10px;
   z-index: 1;
+  position: absolute;
 }
 
 .pagination li.active {
@@ -154,10 +176,55 @@ h1 {
   color: red;
 }
 
+/* VER OBRA **********************/
+.datos-obra{
+  position: relative;
+}
+
+#vendida-obra{
+ margin-left: 0; 
+}
+
+.titulo-obra{
+  text-transform: capitalize;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  color: #bdbdbd;
+}
+
+.modal-content .chip{
+  /*height: 6rem;*/
+  margin-left: 20px
+}
+
+.modal-content .chip img{
+  height: 5rem;
+  width: 5rem;
+  position: relative;
+  left: -20px;
+}
+
+.modal-content .chip a{
+  font-size: 1.3rem;
+  color: #009688;
+}
+
 /* CARRITO **********************/
 .carrito img {
   height: 50px;
 }
 
-/* VER OBRA **********************/
-/* FOOTER **********************/
+/* ADMIN. PEDIDOS **********************/
+#tbodyDetalle img {
+  height: 50px;
+}
+
+/* ADMIN. OBRAS **********************/
+#tbodyObras img {
+  height: 50px;
+}
+.vendida{
+  float: left !important;
+  margin-left: 0px !important;
+
+}

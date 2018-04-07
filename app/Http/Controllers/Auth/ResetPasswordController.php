@@ -45,7 +45,7 @@ class ResetPasswordController extends Controller {
     return [
       'token'    => 'required',
       'email'    => 'required|email',
-      'password' => 'required|confirmed|min:6|max:20',
+      'password' => 'required|confirmed',
     ];
   }
 
@@ -60,8 +60,8 @@ class ResetPasswordController extends Controller {
       'email.email'        => 'El formato de email es incorrecto',
       'password.required'  => 'El campo es requerido',
       'password.confirmed' => 'Los passwords no coinciden',
-      'password.min'       => 'El mínimo de caracteres permitidos son 6',
-      'password.max'       => 'El máximo de caracteres permitidos son 20',
+      // 'password.min'       => 'El mínimo de caracteres permitidos son 6',
+      // 'password.max'       => 'El máximo de caracteres permitidos son 20',
     ];
   }
 

@@ -4,7 +4,7 @@
   {{-- TÍTULO & PRECIO --}}
   <div class="row">
     <div class="input-field col s6">
-      <input name="titulo" id="titulo" type="text" value="{{ isset($obra->titulo_obra) ? $obra->titulo_obra : old('titulo') }}">
+    <input name="titulo" id="titulo" type="text" value="{{ isset($obra->titulo_obra) ? $obra->titulo_obra : old('titulo') }}">
       <label for="titulo">Título</label>
       <div class="text-danger">{{ $errors->first('titulo') }}</div>
     </div>
@@ -12,14 +12,6 @@
       <input name="precio" id="precio" type="number" min="0" step="any" value="{{ isset($obra->precio) ? $obra->precio : old('precio') }}">
       <label for="precio">Precio</label>
       <div class="text-danger">{{ $errors->first('precio') }}</div>
-    </div>
-  </div>
-  {{-- DESCRIPCION --}}
-  <div class="row">
-    <div class="input-field col s12">
-      <textarea name="descripcion" id="descripcion" class="materialize-textarea validate">{{ isset($obra->descripcion) ? $obra->descripcion : old('descripcion') }}</textarea>
-      <label for="descripcion">Descripcion</label>
-      <div class="text-danger">{{ $errors->first('descripcion') }}</div>
     </div>
   </div>
   {{-- FOTO --}}
@@ -30,7 +22,7 @@
         <input type="file" name="foto" >
       </div>
       <div class="file-path-wrapper">
-        <input name="ruta_foto" id="file" class="file-path" type="text" placeholder="imagen" value="{{ isset($obra->imagen) ? $obra->imagen : old('foto') }}">
+        <input name="ruta_foto" id="file" class="file-path" type="text" placeholder="imagen" value="{{ old('foto') }}">
         <div class="text-danger">{{ $errors->first('foto') }}</div>
       </div>
     </div>
@@ -67,11 +59,14 @@
         Si
       </label>
     </div>
-    <div class="col s6">
-      <p class="grey-text">Etiquetas</p>
-      <div class="chips chips-autocomplete"></div>
-    </div>
+
+    <div class="input-field col s6">
+      <div id="chips" data-token="{{ csrf_token() }}" class="chips chips-initial chips-autocomplete"></div>
+      <label for="chips">Etiquetas</label>
+    </div> 
+
   </div>
+
   {{-- TAMAÑO --}}
   <h4 class="col s12 grey-text">Medidas (cm) </h4>
   <div class="row">

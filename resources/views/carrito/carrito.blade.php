@@ -21,13 +21,13 @@
       <tbody>
         @foreach ($carrito as $item)
         <tr>
-          <td><img class="materialboxed z-depth-1" data-caption="{{ $item->titulo_obra }}" src="{{ url($item->imagen) }}" alt="{{ $item->titulo_obra }}"></td>
-          <td><a href="{{ route('ver-obra', $item->titulo_obra) }}">{{ $item->titulo_obra }}</a></td>
+          <td><img class="materialboxed z-depth-1 tooltipped" data-position="right" data-tooltip="Ver a pantalla completa" data-caption="{{ $item->titulo_obra }}" src="{{ url($item->imagen) }}" alt="{{ $item->titulo_obra }}"></td>
+          <td><a class="teal-text tooltipped" data-position="right" data-tooltip="Ver obra" href="{{ route('ver-obra', $item->titulo_obra) }}">{{ $item->titulo_obra }}</a></td>
           <td>{{ number_format($item->precio,2) }}</td>
           <td>{{ $item->cantidad }}</td>
           <td>{{ number_format($item->precio * $item->cantidad,2) }} €</td>
           <td>
-            <a href="{{route('borrar-carrito', $item->titulo_obra) }}" class="btn-falt waves-effect waves-teal black-text">
+            <a href="{{route('borrar-carrito', $item->titulo_obra) }}" class="btn-falt waves-effect waves-teal teal-text">
               <i class="material-icons">delete</i>
             </a>
           </td>
@@ -50,7 +50,7 @@
 </div>
 <div class="row">  
   <div class="col s6">
-    <a href="{{ route('home') }}" class="waves-effect waves-light left btn">
+    <a href="{{ url('/#Catálogo') }}" class="waves-effect waves-light left btn">
       <i class="material-icons right">add_shopping_cart</i>
       Seguir comprando
     </a>

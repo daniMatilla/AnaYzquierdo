@@ -3,7 +3,11 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Ana Yzquierdo - @yield('title')</title>
+  <!--favicon-->
+  <link rel="icon" href="{{ url('favicon.png') }}" type="image/x-icon">
+  <link rel="shortcut icon" href="{{ url('favicon.png') }}" type="image/x-icon">
+
+  <title>A.Yzquierdo - @yield('title')</title>
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -11,37 +15,52 @@
   <link href="{{ url('/css/estilo.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
+  <noscript class="z-depth-2">
+    <h5 class="center">Bienvenido a anayzquierdo.com</h5>
+    <p class="center">La página que estás viendo requiere JavaScript para su correcto funcionamiento.</p> 
+    <p class="center">Por favor considera el activarlo.</p>
+  </noscript>
+
   @if(Session::has('status'))
   <div id="modal-alert" class="modal">
     <div class="modal-content center-align">
       <p>{{ Session::get('status') }}</p>
     </div>
     <div class="modal-footer">
-      <a class="modal-action modal-close waves-effect waves-green btn-flat">Aceptar</a>
+      <a class="modal-action modal-close waves-effect waves-teal btn-flat">Aceptar</a>
     </div>
   </div>
   @endif
 
   {{-- CABECERA --}}
+
+
   <header>
     @if(Request::is('/'))
     @php
-    $total_obras = anayzquierdo\Obra::all()->count();
-    $id = rand(1,$total_obras);
-    $imagen = anayzquierdo\Obra::find($id)->imagen;
+    // Aquí selecionamos una imagen aleatoria para mostrar en el parallax
+    $obra = anayzquierdo\Obra::inRandomOrder()->first();
+    $imagen = $obra->imagen;
     @endphp
     <div class="parallax-container parallax-top section scrollspy valign-wrapper" id="bienvenida">
       <div class="row">
         <div class="col s12 center">
-          <h1 class="black-text text-darken-2">Ana Yzquierdo</h1>
-          <h5 class="black-text light">Aquí iría el saludo personalizado</h5>
+          <h1>
+            <img class="responsive-img" src="{{ url('images/logo_yzquierdo_negro.png') }}" alt="Ana Yzquiedo">
+            <span class="">Ana Yzquierdo</span>
+          </h1>
+          @php
+          $admin = anayzquierdo\Usuario::where('rol', 'admin')->first();
+          \Debugbar::info($admin);
+          @endphp
+          <h5 class="black-text light">{{ $admin->saludo }}</h5>
           <div class="parallax">
-            <img src="{{ url($imagen) }}">
+            <img src="{{ url($imagen) }}" alt="{{ $obra->titulo_obra }}">
           </div>
         </div>
         <i class="arrow medium material-icons">keyboard_arrow_down</i>
       </div>
-    </div>        
+    </div>
     <div class="parallax difumina"></div>
     @endif
 
@@ -50,51 +69,127 @@
 
   {{-- CUERPO --}}
   <main>
-    <div class="section {{ Request::is('/') ? ' z-depth-3 ' : '' }}">
+    <div class="section {{ Request::is('/') ? 'z-depth-3' : '' }}">
       <div class="row">
         <div id="@yield('title')" class="contenido col s12 m8 l9 offset-m1 scrollspy">
           @yield('content')
         </div>
         <div class="col hide-on-small-only m3 l2">
           <ul class="sider-pushpin section table-of-contents" id="pushpin">
-            <li><a href="{{ url('/#nav') }}">Bienvenida</a></li>
+            <li><a href="{{ url('/#Catálogo') }}">Bienvenida</a></li>
             <li><a href="#@yield('title')">@yield('title')</a></li>
+            @if(Request::is('catalogo/editar/*'))
+            <li>
+              <img id="miniatura" class="responsive-img z-depth-2" src="{{ url($obra->imagen) }}" alt="{{ $obra->titulo_obra }}">
+            </li>
+            @endif
           </ul>
-          @if(Request::is('catalogo/editar/*'))
-          <img id="miniatura" class="responsive-img z-depth-2" src="{{ url($obra->imagen) }}">
-          @endif
         </div>
       </div>
     </div>
 
     @if(Request::is('/'))
-    <div class="parallax-container section scrollspy" id="bienvenida">
+    <div class="parallax-container section scrollspy">
       <div class="parallax">
-        <img src="{{ url($imagen) }}">
+        <img src="{{ url($imagen) }}" alt="{{ $obra->titulo_obra }}">
       </div>
     </div>
     @endif
   </main>
 
   {{-- PIE --}}
-  <footer class="page-footer teal darken-2">
-    <div class="footer-copyright">
-      <div class="row">
-        <div class="col s12">© 2017 Ana Yzquierdo</div>
-     </div>
-     <div class="row hide-on-small-only ">
-      <span class="grey-text text-lighten-2 right">Hecho por
-        <a class="white-text" href="#!">Daniel Matilla</a>
-      </span>
+  <footer class="page-footer teal darken-2">    
+    <div class="fixed-action-btn toolbar">
+      <a class="btn-floating btn-large deep-orange darken-4 pulse tooltipped" data-position="left" data-tooltip="Datos para pruebas" href="#datos-pruebas">
+        <i class="large material-icons">help_outline</i>
+      </a>
     </div>
-  </div>
-</footer>
+    <div class="container">
+      <div class="row">
+        <div class="col s12 l6">
+          <h5 class="white-text">Ayuda a crecer a anayzquierdo.com</h5>
+          <p class="grey-text text-lighten-4">Cualquier petición, comentario y/o sugerencia</p>
+          <a href="{{ route('contacto') }}" class="btn teal darken-3 waves-effect waves-light">Contacta</a>
+        </div>
+        <div class="col s12 l4 offset-l2">
+        <br>
+        <div class="divider hide-on-large-only"></div>
+          <h5 class="white-text">Links</h5>
+          <ul>
+            <li>
+              <a class="grey-text text-lighten-3" href="{{ url('sitemap.html') }}">Mapa del sitio</a>
+            </li>
+            <li><a class="grey-text text-lighten-3" href="#!">...</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+        <span class="left">© 2017 Ana Yzquierdo</span>
+        <span class="grey-text text-lighten-2 right hide-on-small-only">Hecho por
+          <a class="white-text">Daniel Matilla</a>
+        </span>
+      </div>
+    </div>
+    <div id="datos-pruebas" class="modal bottom-sheet">
+      <div class="modal-content">
+        <ul class="collapsible popout" data-collapsible="accordion">
+          <li>
+            <div class="collapsible-header teal white-text">Administrador</div>
+            <div class="collapsible-body">
+              <p class="cabecera teal darken-3 white-text">Usuario</p>
+              <p>dani@mail.com</p>
+              <p class="cabecera teal darken-3 white-text">Contraseña</p>
+              <p>daniel</p>
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header teal white-text">Cliente activado</div>
+            <div class="collapsible-body">
+              <p class="cabecera teal darken-3 white-text">Usuario</p>
+              <p>costa.ivan@hotmail.es</p>
+              <p class="cabecera teal darken-3 white-text">Contraseña</p>
+              <p>bruno</p>
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header teal white-text">Cliente no activado</div>
+            <div class="collapsible-body">
+              <p class="cabecera teal darken-3 white-text">Usuario</p>
+              <p>alba.armenta@terra.com</p>
+              <p class="cabecera teal darken-3 white-text">Contraseña</p>
+              <p>aroa</p>
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header teal white-text">Cliente bloqueado</div>
+            <div class="collapsible-body">
+              <p class="cabecera teal darken-3 white-text">Usuario</p>
+              <p>yeray.heredia@saavedra.org</p>
+              <p class="cabecera teal darken-3 white-text">Contraseña</p>
+              <p>sara</p>
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header teal white-text">Cuenta PayPal</div>
+            <div class="collapsible-body">
+              <p class="cabecera teal darken-3 white-text">Usuario</p>
+              <p>nous-buyer-1@hotmail.es</p>
+              <p class="cabecera teal darken-3 white-text">Contraseña</p>
+              <p>anayzquierdo</p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 
-<!--  Scripts -->
-<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script src="{{ url('/js/jquery-3.2.1.js') }}"></script>
-<script src="{{ url('/assets/materialize/js/materialize.min.js') }}"></script>
-<script src="{{ url('/js/init.js') }}"></script>
+  <!--  Scripts -->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="{{ url('/js/jquery-3.2.1.js') }}"></script>
+  <script src="{{ url('/assets/materialize/js/materialize.min.js') }}"></script>
+  <script src="{{ url('/js/init.js') }}"></script>
 
 </body>
 </html>

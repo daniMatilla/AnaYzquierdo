@@ -10,7 +10,7 @@ if(Auth::user()->activo){
   }
 }
 @endphp
-<a id="favorito-{{ $obra->id_obra }}" href="{{ route('favorito') }}" class="btn-favorito waves-effect waves-light right" data-id_obra = "{{ $obra->id_obra }}" data-id_usuario = "{{ Auth::user()->id_usuario }}">
+<a id="favorito-{{ $obra->id_obra }}" href="{{ route('favorito') }}" class="btn-favorito tooltipped" data-position="left" data-tooltip="Añadir a favoritos" data-id_obra = "{{ $obra->id_obra }}" data-id_usuario = "{{ Auth::user()->id_usuario }}">
 <i class="material-icons teal-text">
   @if($hayFavorita)
   {{ 'favorite' }}

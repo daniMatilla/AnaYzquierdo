@@ -1,8 +1,10 @@
 <?php
 
 namespace anayzquierdo\Http\Controllers;
-use anayzquierdo\Obra;
+use anayzquierdo\ClasObra;
+use anayzquierdo\Etiqueta;
 use anayzquierdo\Favorito;
+use anayzquierdo\Obra;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -10,7 +12,7 @@ use Validator;
 
 class CatalogoController extends Controller {
 
-  private function favoritas(){
+  private function favoritas() {
     $favoritas = "";
     if (Auth::check()) {
       $favoritas = Favorito::recuperarFavoritasDeUsuario(Auth::user()->id_usuario);
@@ -19,16 +21,16 @@ class CatalogoController extends Controller {
     }
     return $favoritas;
   }
-  
+
   public function getBienvenida() {
-    $obras = Obra::recuperarTodasObras();
+    $obras     = Obra::recuperarTodasObras();
     $favoritas = $this->favoritas();
 
     return view('catalogo.catalogo')->with(['obras' => $obras, 'favoritas' => $favoritas]);
   }
 
   public function getVer($titulo_obra) {
-    $obra = Obra::buscarObraPorTitulo($titulo_obra);
+    $obra      = Obra::buscarObraPorTitulo($titulo_obra);
     $favoritas = $this->favoritas();
     return view('catalogo.ver')->with(['obra' => $obra, 'favoritas' => $favoritas]);
   }
@@ -55,14 +57,13 @@ class CatalogoController extends Controller {
       $imagenRenombrada = $request->titulo . '.' . $extension;
       $file->storeAs('images/obras', $imagenRenombrada);
 
-      $obra->imagen      = Storage::disk('obras')->url($imagenRenombrada);
-      $obra->tecnica     = $request->tecnica;
-      $obra->soporte     = $request->soporte;
-      $obra->largo       = $request->largo;
-      $obra->alto        = $request->alto;
-      $obra->precio      = $request->precio;
-      $obra->descripcion = $request->descripcion;
-      $obra->vendida     = isset($request->vendida) ? true : false;
+      $obra->imagen  = Storage::disk('obras')->url($imagenRenombrada);
+      $obra->tecnica = $request->tecnica;
+      $obra->soporte = $request->soporte;
+      $obra->largo   = $request->largo;
+      $obra->alto    = $request->alto;
+      $obra->precio  = $request->precio;
+      $obra->vendida = isset($request->vendida) ? true : false;
       $obra->save();
 
       //Retornamos la vista de la obra creada
@@ -70,19 +71,86 @@ class CatalogoController extends Controller {
     }
   }
 
-  public function getEditar($titulo_obra) {
-    $obra = Obra::buscarObraPorTitulo($titulo_obra);
-    return view('catalogo.editar')->with('obra', $obra);
+  public function getEditar(Request $request, $titulo_obra) {
+    $obra            = Obra::buscarObraPorTitulo($titulo_obra);
+    $etiquetas_obra  = $obra->etiquetas;
+    $todas_etiquetas = Etiqueta::RecuperarTodasEtiquetas();
+
+    if ($request->ajax()) {
+      $etiquetas_obra = $etiquetas_obra->map(function ($i, $k) {
+        return $i->nombre_etiqueta;
+      });
+      $todas_etiquetas = $todas_etiquetas->map(function ($i, $k) {
+        return $i->nombre_etiqueta;
+      });
+      return response()->json(['etiquetas' => $etiquetas_obra, 'todas_etiquetas' => $todas_etiquetas]);
+    } else {
+      return view('catalogo.editar')->with(['obra' => $obra, 'etiquetas' => $etiquetas_obra]);
+    }
   }
 
+  /**
+   * Añade o elimina etiquetas de la obra editada o creada en la BBDD
+   */
+  public function postEditarEtiquetas(Request $request, $titulo_obra) {
+    $obra = Obra::buscarObraPorTitulo($titulo_obra);
+
+    if ($request->ajax()) {
+      $tags = $request->chip;
+      foreach ($tags as $tag) {
+        \Debugbar::info($tag);
+      }
+
+      // Evitamos la inserción duplicada de etiquetas en la BBDD.
+      $tags_bbdd = Etiqueta::RecuperarTodasEtiquetas();
+      $etiquetas = $tags_bbdd->map(function ($i, $k) {
+        return $i->nombre_etiqueta;
+      });
+      // dd($etiquetas);
+      foreach ($tags as $tag) {
+        if ($request->accion == 'tag_aniadir') {
+          if ($etiquetas->contains($tag)) {
+            \Debugbar::info('La etiqueta "' . $tag . '" existe en la BBDD');
+            $etiqueta = Etiqueta::where('nombre_etiqueta', $tag)->first();
+          } else {
+            \Debugbar::info('La etiqueta "' . $tag . '" no existe en la BBDD');
+            $etiqueta                  = new Etiqueta();
+            $etiqueta->nombre_etiqueta = $tag;
+            $etiqueta->save();
+          }
+
+          // Compruebo si la relación existe
+          $clasObra = ClasObra::where(['id_obra' => $obra->id_obra, 'id_etiqueta' => $etiqueta->id_etiqueta])->first();
+          if (count($clasObra) == 0) {
+            $clasObra              = new ClasObra();
+            $clasObra->id_obra     = $obra->id_obra;
+            $clasObra->id_etiqueta = $etiqueta->id_etiqueta;
+            $clasObra->save();
+          }
+          return response()->json(['resultado' => 'tag_aniadida']);
+        } else if ($request->accion == 'tag_eliminar') {
+          $etiqueta = Etiqueta::where('nombre_etiqueta', $tag)->first();
+          $clasObra = ClasObra::where(['id_obra' => $obra->id_obra, 'id_etiqueta' => $etiqueta->id_etiqueta])->first();
+          $clasObra->delete();
+          return response()->json(['resultado' => 'tag_eliminada']);
+        }
+      }
+    }
+  }
+
+  /**
+   * Modifica la obra editada
+   */
   public function putEditar(Request $request, $titulo_obra) {
+
     $obra      = Obra::buscarObraPorTitulo($titulo_obra);
     $validator = $this->validacionDeCamposEditar($request);
 
+    // Si la validación falla se regresa al formulario mostrando los errores y manteniendo los campos
     if ($validator->fails()) {
-      // Si la validación falla se regresa al formulario mostrando los errores y manteniendo los campos
       \Debugbar::info('Algo falla');
       return redirect()->back()->withErrors($validator->errors())->withInput();
+      // En caso contrario...
     } else {
       // Si no modificamos la imagen...
       if (!$request->hasFile('foto')) {
@@ -99,6 +167,18 @@ class CatalogoController extends Controller {
           $obra->imagen = Storage::disk('obras')->url($imagenRenombrada);
           \Debugbar::info($obra->imagen);
         }
+      } else {
+        if ($request->titulo != $obra->titulo_obra) {
+          \Debugbar::info($obra->imagen);
+          $imagen = $obra->imagen;
+          Storage::delete($imagen);
+        }
+        //Tratamiento de la imagen
+        $file             = $request->file('foto');
+        $extension        = $file->extension();
+        $imagenRenombrada = $request->titulo . '.' . $extension;
+        $file->storeAs('images/obras', $imagenRenombrada);
+        $obra->imagen = Storage::disk('obras')->url($imagenRenombrada);
       }
       $obra->titulo_obra = $request->titulo;
       $obra->precio      = $request->precio;
@@ -107,20 +187,21 @@ class CatalogoController extends Controller {
       $obra->largo       = $request->largo;
       $obra->alto        = $request->alto;
       $obra->precio      = $request->precio;
-      $obra->descripcion = $request->descripcion;
-      $obra->vendida     = $request->vendida ? true : false;
+      // $obra->vendida     = $request->has('vendida') ? false : true;
+      $obra->vendida     = isset($request->vendida) ? true : false;
       $obra->save();
 
-      //Retornamos la vista de la obra creada
-      return redirect('catalogo/ver/' . $request->titulo);
+      //Retornamos la vista de la obra editada
+      return redirect()->route('ver-obra', $request->titulo)
+        ->with("status", "Los datos se han modificado correctamente");
     }
   }
 
   public function validacionDeCamposNueva(Request $request) {
     $rules = [
       'titulo'  => 'required|string|min:3|max:50|unique:obras,titulo_obra',
-      'precio'  => 'required|numeric|min:1',
-      'foto'    => 'image|max:2048*2048*1|mimes:jpeg,jpg,gif,png',
+      'precio'  => 'required|numeric|min:0|max:9999',
+      'foto'    => 'required|image|max:2048*2048*1|mimes:jpeg,jpg,gif,png',
       'tecnica' => 'required|alpha|max:20',
       'soporte' => 'required|alpha|max:20',
       'largo'   => 'required|numeric|digits_between:1,3|min:1',
@@ -135,9 +216,11 @@ class CatalogoController extends Controller {
       'titulo.unique'        => 'Ya existe una obra con este título',
 
       'precio.required'      => 'El precio es requerido',
-      'precio.numeric'       => 'No creo que te interese cobrar en letras',
-      'precio.min'           => 'Mi consejo es que cobres más de 1€',
+      'precio.numeric'       => 'Sólo números',
+      'precio.min'           => 'Números positivos',
+      'precio.max'           => 'Hasta 9999',
 
+      'foto.required'        => 'El campo es requerido',
       'foto.max'             => 'Tamaño máximo de archivo 2Mb',
       'foto.mimes'           => 'Extensiones permitidas (jpeg,jpg,gif o png)',
 
@@ -168,7 +251,7 @@ class CatalogoController extends Controller {
   public function validacionDeCamposEditar(Request $request) {
     $rules = [
       'titulo'  => 'required|string|min:3|max:50',
-      'precio'  => 'required|numeric|min:1',
+      'precio'  => 'required|numeric|min:0|max:9999',
       'foto'    => 'image|max:2048*2048*1|mimes:jpeg,jpg,gif,png',
       'tecnica' => 'required|alpha|max:20',
       'soporte' => 'required|alpha|max:20',
@@ -184,8 +267,8 @@ class CatalogoController extends Controller {
       'titulo.unique'        => 'Ya existe una obra con este título',
 
       'precio.required'      => 'El precio es requerido',
-      'precio.numeric'       => 'No creo que te interese cobrar en letras',
-      'precio.min'           => 'Mi consejo es que cobres más de 1€',
+      'precio.min'           => 'Números positivos',
+      'precio.max'           => 'Hasta 9999',
 
       'foto.max'             => 'Tamaño máximo de archivo 2Mb',
       'foto.mimes'           => 'Extensiones permitidas (jpeg,jpg,gif o png)',

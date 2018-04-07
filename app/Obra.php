@@ -43,4 +43,12 @@ class Obra extends Model {
     return $this->hasOne('anayzquierdo\DetPedido', 'id_obra');
   }
 
+  /**
+   * Relación de Obras con Etiquetas.
+   */
+  public function etiquetas() {
+    return $this->belongsToMany('anayzquierdo\Etiqueta','clas_obras','id_obra', 'id_etiqueta')
+    ->withPivot('id_obra');
+  }
+
 }

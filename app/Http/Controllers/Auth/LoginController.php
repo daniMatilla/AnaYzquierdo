@@ -41,11 +41,10 @@ class LoginController extends Controller {
   public function login(Request $request) {
     if (Auth::attempt(
       [
-        'email'     => $request->email,
-        'password'  => $request->password,
-        'activo'    => true,
-      ], $request->has('recordar'))
-    ) {
+        'email'    => $request->email,
+        'password' => $request->password,
+        'activo'   => true,
+      ], $request->has('recordar'))) {
       return redirect()->intended($this->redirectPath())
         ->with('status', 'Bienvenid@ ' . Auth::user()->nombre);
     } else {

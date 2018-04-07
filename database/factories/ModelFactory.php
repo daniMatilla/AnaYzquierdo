@@ -72,6 +72,7 @@ $factory->defineAs(anayzquierdo\Usuario::class, 'admin', function (Faker\Generat
 		'bloqueado' => false,
 		'confirm_token' => str_random(100),
 		'remember_token' => str_random(100),
+		'saludo' => "Lorem ipsum y todo eso...",
 	];
 });
 
@@ -90,5 +91,14 @@ $factory->define(anayzquierdo\Obra::class, function (Faker\Generator $faker) {
 		'alto' => rand(100, 999),
 		'precio' => $faker->randomFloat($nbMaxDecimals = 2, $min = 100, $max = 999),
 		'vendida' => $faker->boolean($chanceOfGettingTrue = 45),
+	];
+});
+
+//Definición de Etiquetas aleatorias
+$factory->define(anayzquierdo\Etiqueta::class, function (Faker\Generator $faker) {
+	$faker = Faker\Factory::create('es_ES');
+
+	return [
+		'nombre_etiqueta' => $faker->unique()->lastName,
 	];
 });

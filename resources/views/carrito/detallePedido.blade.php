@@ -1,5 +1,5 @@
 @extends('layouts.maestra')
-@section('title', 'Detalle pedido')
+@section('title', 'Detalle&nbsp;pedido')
 @section('content')
 <div class="row detalle-pedido">
   <div class="col s12">

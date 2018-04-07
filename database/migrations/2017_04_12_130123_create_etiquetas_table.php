@@ -15,7 +15,7 @@ class CreateEtiquetasTable extends Migration {
 			$table->engine = 'InnoDB';
 
 			$table->increments('id_etiqueta');
-			$table->string('nombre_etiqueta', 20)->unique();
+			$table->string('nombre_etiqueta', 50)->unique();
 			$table->timestamps();
 		});
 	}

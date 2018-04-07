@@ -1,5 +1,5 @@
 @extends('layouts.maestra')
-@section('title', 'Mi Perfil')
+@section('title', 'Mi&nbsp;Perfil')
 @section('content')
 <div class="row">
   <div class="col s12 teal lighten-5 valign-wrapper">
@@ -61,6 +61,16 @@
       </div>
     </div>
 
+    @if(Auth::user()->rol == 'admin')
+    <div class="row">
+      <div class="input-field col s12">
+        <label for="saludo">Saludo</label>
+        <input type="text" name="saludo" id="saludo" value="{{ isset(Auth::user()->saludo) ? Auth::user()->saludo : old('saludo') }}" />
+        <div class="text-danger">{{$errors->first('saludo')}}</div>
+      </div>
+    </div>
+    @endif
+
     <button type="submit" class="col s12 m4 waves-effect waves-light btn right">Modificar</button>
   </form>
 </div>
@@ -75,30 +85,7 @@
 <div class="row">
   @foreach( $obras as $obra )
   <div class="col s12 m6 l4">
-    <div class="card small hoverable sticky-action">
-
-      <div class="card-image">
-        @if($obra->vendida)
-        <span id="vendida" class="new badge grey darken-3 white-text" data-badge-caption="VENDIDA"></span>
-        @endif
-        <img class="materialboxed z-depth-1" data-caption="{{ $obra->titulo_obra }}" src="{{ url($obra->imagen) }}">
-      </div>
-
-      <div class="card-content">
-        <span class="card-title activator grey-text truncate">{{ $obra->titulo_obra }} <i class="right material-icons">more_vert</i></span>
-        <a href="{{ url('catalogo/ver/' . $obra->titulo_obra) }}">Ver detalles</a>
-
-        @include('parciales.favorito')
-
-      </div>
-
-      <div class="card-reveal white-text">
-        <span class="card-title"><i class="material-icons right">close</i></span>
-        <span class="flow-text"><h2>{{ $obra->titulo_obra }}</h2>
-          <h5>{{ $obra->vendida?'0,00€':$obra->precio.'€' }}</h5>
-        </span>
-      </div>
-    </div>
+    @include('parciales.tarjeta_obra')
   </div>
   @endforeach
 </div>
@@ -114,11 +101,11 @@
 @if(count($pedidos) > 0)
 <div class="row">
   <div class="col s12 teal lighten-5 valign-wrapper">
-  <h5>Mis pedidos</h5>
+    <h5>Mis pedidos</h5>
   </div>
 </div>
 <div class="row">
-  <table class="pedidos responsive-table highlight bordered">
+  <table id="tabla-admin-pedidos"  class="pedidos responsive-table highlight bordered">
     <thead>
       <tr>
         <th>Ver detalle</th>
@@ -133,12 +120,34 @@
       <tr>
         <td>
           {{-- VER DETALLE --}}
-          <form action="{{ route('detalle-pedido',['id' => $pedido->id_pedido]) }}" method="post">
+          <form action="{{ route('usuario-detalle-pedido',['id' => $pedido->id_pedido]) }}" method="get">
             {!! csrf_field() !!}
-            <a id="detalle-pedido-{{ $pedido->id_usuario }}" href="#!" class="teal-text btn-estado-pedido btn-flat waves-effect waves-light">
+            <a id="{{ $pedido->id_usuario }}" href="#!" class="teal-text btn-detalle-pedido waves-effect waves-light">
               <i class="material-icons">description</i>
-            </a>
-          </form>
+            </a>    
+          </form>    
+
+          <div id="modal-detalle-pedido-{{ $pedido->id_usuario }}" class="modal">
+            <div class="modal-content left-align">
+              {{-- <h4>Pedido de {{ $pedido->usuario->nombre . " " . $pedido->usuario->apellidos }}</h4> --}}
+              <table class="responsive-table highlight bordered">
+                <thead>
+                  <tr>
+                    <th>Imagen</th>
+                    <th>Obra</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody id="tbodyDetalle">
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+              <a href="#!" class="modal-action modal-close waves-effect waves-teal btn-flat">Aceptar</a>
+            </div>
+          </div>
         </td>
         <td>{{ $pedido->fecha_alta }}</td>
         <td>{{ $pedido->envio }}</td>
@@ -152,7 +161,8 @@
 @else
 <div class="row">
   <div class="col s12 red lighten-5 valign-wrapper">
-    <h5>Aún no he comprado nada :(</h5>
+    <h5>Aún no he comprado nada</h5>
+    <img class="emoji" alt="😕" src="https://s0.wp.com/wp-content/mu-plugins/wpcom-smileys/twemoji/2/svg/1f615.svg">
   </div>
 </div>
 @endif

@@ -84,6 +84,45 @@ class RegisterController extends Controller {
     }
   }
 
+  public function getActivacion() {
+    return view('auth.activacion');
+  }
+
+  public function postActivacion(Request $request) {
+    $rules = [
+      'email' => 'required|email|max:191',
+    ];
+
+    $messages = [
+      'email.required' => 'El campo es requerido',
+      'email.email'    => 'El formato de email es incorrecto',
+      'email.max'      => 'El máximo de caracteres permitidos son 191',
+    ];
+
+    $validator = Validator::make($request->all(), $rules, $messages);
+
+    if ($validator->fails()) {
+      return redirect()->route('activacion')
+        ->withErrors($validator)
+        ->withInput();
+    } else {
+      $usuario               = Usuario::where('email', $request->email)->first();
+      $data['nombre']        = $usuario->nombre;
+      $data['email']         = $request->email;
+      $data['confirm_token'] = $usuario->confirm_token = str_random(100);
+      $usuario->save();
+
+      // Aquí enviamos el mail de confirmación
+      Mail::send('emails.register', ['data' => $data], function ($mail) use ($data) {
+        $mail->subject('Confirma tu cuenta');
+        $mail->to($data['email'], $data['nombre']);
+      });
+
+      return redirect()->route('home')
+        ->with("status", "Se ha enviado un enlace de confirmación a tu cuenta de correo electrónico");
+    }
+  }
+
   public function confirmRegister($email, $confirm_token) {
     $usuario = new Usuario;
 

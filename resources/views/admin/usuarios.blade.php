@@ -1,5 +1,5 @@
 @extends('layouts.maestra')
-@section('title', 'Admin. Usuarios')
+@section('title', 'Admin.&nbsp;Usuarios')
 @section('content')
 
   <div id="modal-alert-admin-usuarios" class="modal">
@@ -31,7 +31,7 @@
       @show
       </tbody>
     </table>
-    @include('parciales.paginacion-admin')
+    @include('parciales.paginacion')
   </div>
 
   @endsection

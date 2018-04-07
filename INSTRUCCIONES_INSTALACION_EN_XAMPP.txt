@@ -1,0 +1,14 @@
+## Ejemplo de instalación del proyecto GaleriaArte_Yzquierdo en xampp
+
+1.- Copiar el directorio GaleriaArte_Yzquierdo en el directorio htdocs de xampp
+2.- Iniciar la consola de comandos en el directorio GaleriaArte_Yzquierdo
+3.- Ejecutar el siguiente comando:
+    
+     php artisan serve
+
+    Aparecerá algo parecido a esto:
+    
+     Laravel development server started: <http://127.0.0.1:8000>
+
+4.- En la barra de direcciones de un navegador cualquiera ingresar la direccion propuesta entre < y >
+5.- Disfrutar

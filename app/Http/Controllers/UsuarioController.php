@@ -1,10 +1,11 @@
 <?php
 
 namespace anayzquierdo\Http\Controllers;
+use anayzquierdo\DetPedido;
 use anayzquierdo\Favorito;
 use anayzquierdo\Obra;
-use anayzquierdo\Usuario;
 use anayzquierdo\Pedido;
+use anayzquierdo\Usuario;
 use Auth;
 use Illuminate\Http\Request;
 use Validator;
@@ -37,6 +38,7 @@ class UsuarioController extends Controller {
       'poblacion' => 'nullable|required_with:direccion',
       'provincia' => 'nullable|required_with:direccion',
       'cp'        => 'nullable|required_with:direccion|regex:/^\d{5}$/',
+      'saludo'    => 'nullable|regex:/^[a-záéíóúàèìòùäëïöüñ\s]+$/i',
     ];
 
     $messages = [
@@ -53,7 +55,7 @@ class UsuarioController extends Controller {
       'provincia.required_with' => 'El campo es requerido',
       'cp.required_with'        => 'El campo es requerido',
       'cp.regex'                => 'Formato: "ddddd"',
-
+      'saludo.regex'            => 'Sólo se aceptan letras',
     ];
 
     $validator = Validator::make($request->all(), $rules, $messages);
@@ -71,10 +73,18 @@ class UsuarioController extends Controller {
       $usuario->poblacion = $request->poblacion;
       $usuario->provincia = $request->provincia;
       $usuario->cp        = $request->cp;
+      $usuario->saludo    = $request->saludo;
       $usuario->save();
 
       return redirect()->route('panel-usuario')
         ->with("status", "Los datos se han modificado correctamente");
+    }
+  }
+
+  public function getDetallePedido(Request $request, $id_pedido) {
+    if ($request->ajax()) {
+      $items = DetPedido::RecuperarDetallePedido($id_pedido);
+      return response()->json(['accion' => 'ver_detalle', 'items' => $items]);
     }
   }
 }

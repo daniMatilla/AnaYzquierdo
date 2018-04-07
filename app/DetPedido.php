@@ -25,4 +25,11 @@ class DetPedido extends Model {
   public function obra() {
     return $this->belongsTo('anayzquierdo\Obra', 'id_obra');
   }
+
+  /**
+   * Recupera las líneas de un pedido
+   */
+  public function scopeRecuperarDetallePedido($query, $id_pedido) {
+    return $query->with('obra')->where('id_pedido', $id_pedido)->get();
+  }
 }
