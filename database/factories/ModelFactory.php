@@ -27,78 +27,86 @@ return [
  */
 
 // Definición de Usuarios aleatorios
-$factory->define(anayzquierdo\Usuario::class, function (Faker\Generator $faker) {
-	$faker = Faker\Factory::create('es_ES');
-	static $nombre;
+$factory->define(
+    anayzquierdo\Usuario::class, function (Faker\Generator $faker) {
+        $faker = Faker\Factory::create('es_ES');
+        static $nombre;
+        static $activo;
 
-	return [
-		'email' => $faker->unique()->email,
-		'nombre' => $nombre = $faker->firstName,
-		'password' => bcrypt(strtolower($nombre)),
-		'avatar' => '',
-		'apellidos' => $faker->lastName . ' ' . $faker->lastName,
-		'telefono' => rand(600000000, 999999999),
-		'direccion' => $faker->streetAddress,
-		'poblacion' => $faker->city,
-		'cp' => $faker->postcode,
-		'provincia' => $faker->state,
-		'rol' => 'cliente',
-		'activo' => $faker->boolean($chanceOfGettingTrue = 30),
-		'bloqueado' => $faker->boolean($chanceOfGettingTrue = 10),
-		'confirm_token' => str_random(100),
-		'remember_token' => str_random(100),
-	];
-});
-
+        return [
+            'email' => $faker->unique()->email,
+            'nombre' => $nombre = $faker->firstName,
+            'password' => bcrypt(strtolower($nombre)),
+            'avatar' => '',
+            'apellidos' => $faker->lastName . ' ' . $faker->lastName,
+            'telefono' => rand(600000000, 999999999),
+            'direccion' => $faker->streetAddress,
+            'poblacion' => $faker->city,
+            'cp' => $faker->postcode,
+            'provincia' => $faker->state,
+            'rol' => 'cliente',
+            'activo' => $activo = $faker->boolean($chanceOfGettingTrue = 30),
+            'bloqueado' => $activo ? $faker->boolean($chanceOfGettingTrue = 10) : 0,
+            'confirm_token' => str_random(100),
+            'remember_token' => str_random(100),
+        ];
+    }
+);
 
 // Definición de administrador
-$factory->defineAs(anayzquierdo\Usuario::class, 'admin', function (Faker\Generator $faker) {
-	$faker = Faker\Factory::create('es_ES');
-	static $nombre;
+$factory->defineAs(
+    anayzquierdo\Usuario::class, 'admin', function (Faker\Generator $faker) {
+        $faker = Faker\Factory::create('es_ES');
+        static $nombre;
 
-	return [
-		'email' => 'dani@mail.com',
-		'nombre' => $nombre = 'Daniel',
-		'password' => bcrypt(strtolower($nombre)),
-		'avatar' => '',
-		'apellidos' => $faker->lastName . ' ' . $faker->lastName,
-		'telefono' => rand(600000000, 999999999),
-		'direccion' => $faker->streetAddress,
-		'poblacion' => $faker->city,
-		'cp' => $faker->postcode,
-		'provincia' => $faker->state,
-		'rol' => 'admin',
-		'activo' => true,
-		'bloqueado' => false,
-		'confirm_token' => str_random(100),
-		'remember_token' => str_random(100),
-		'saludo' => "Lorem ipsum y todo eso...",
-	];
-});
+        return [
+            'email' => 'dani@mail.com',
+            'nombre' => $nombre = 'Daniel',
+            'password' => bcrypt(strtolower($nombre)),
+            'avatar' => '',
+            'apellidos' => $faker->lastName . ' ' . $faker->lastName,
+            'telefono' => rand(600000000, 999999999),
+            'direccion' => $faker->streetAddress,
+            'poblacion' => $faker->city,
+            'cp' => $faker->postcode,
+            'provincia' => $faker->state,
+            'rol' => 'admin',
+            'activo' => true,
+            'bloqueado' => false,
+            'confirm_token' => str_random(100),
+            'remember_token' => str_random(100),
+            'saludo' => "Lorem ipsum y todo eso...",
+        ];
+    }
+);
 
 //Definición de Obras aleatorias
-$factory->define(anayzquierdo\Obra::class, function (Faker\Generator $faker) {
-	$faker = Faker\Factory::create('es_ES');
-	static $imagen;
-	$imagen = $imagen ? $imagen + 1 : 1;
+$factory->define(
+    anayzquierdo\Obra::class, function (Faker\Generator $faker) {
+        $faker = Faker\Factory::create('es_ES');
+        static $imagen;
+        $imagen = $imagen ? $imagen + 1 : 1;
 
-	return [
-		'titulo_obra' => $faker->firstNameFemale . '_' . $imagen,
-		'imagen' => 'images/obras/' . $imagen . '.jpg',
-		'tecnica' => $faker->firstNameFemale,
-		'soporte' => $faker->firstNameMale,
-		'largo' => rand(100, 999),
-		'alto' => rand(100, 999),
-		'precio' => $faker->randomFloat($nbMaxDecimals = 2, $min = 100, $max = 999),
-		'vendida' => $faker->boolean($chanceOfGettingTrue = 45),
-	];
-});
+        return [
+            'titulo_obra' => $faker->firstNameFemale . '_' . $imagen,
+            'imagen' => 'images/obras/' . $imagen . '.jpg',
+            'tecnica' => $faker->firstNameFemale,
+            'soporte' => $faker->firstNameMale,
+            'largo' => rand(100, 999),
+            'alto' => rand(100, 999),
+            'precio' => $faker->randomFloat($nbMaxDecimals = 2, $min = 100, $max = 999),
+            'vendida' => $faker->boolean($chanceOfGettingTrue = 45),
+        ];
+    }
+);
 
 //Definición de Etiquetas aleatorias
-$factory->define(anayzquierdo\Etiqueta::class, function (Faker\Generator $faker) {
-	$faker = Faker\Factory::create('es_ES');
+$factory->define(
+    anayzquierdo\Etiqueta::class, function (Faker\Generator $faker) {
+        $faker = Faker\Factory::create('es_ES');
 
-	return [
-		'nombre_etiqueta' => $faker->unique()->lastName,
-	];
-});
+        return [
+            'nombre_etiqueta' => $faker->unique()->lastName,
+        ];
+    }
+);

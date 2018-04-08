@@ -13,6 +13,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="{{ url('/assets/materialize/css/materialize.min.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="{{ url('/css/estilo.css') }}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.9/js/all.js" integrity="sha384-8iPTk2s/jMVj81dnzb/iFR2sdA7u06vHJyyLlAd4snFpCl/SnyUjRrbdJsw1pGIl" crossorigin="anonymous"></script>
 </head>
 <body>
   <noscript class="z-depth-2">
@@ -88,40 +89,30 @@
       </div>
     </div>
 
-    @if(Request::is('/'))
+    {{-- @if(Request::is('/'))
     <div class="parallax-container section scrollspy">
       <div class="parallax">
         <img src="{{ url($imagen) }}" alt="{{ $obra->titulo_obra }}">
       </div>
     </div>
-    @endif
+    @endif --}}
   </main>
 
   {{-- PIE --}}
-  <footer class="page-footer teal darken-2">    
-    <div class="fixed-action-btn toolbar">
-      <a class="btn-floating btn-large deep-orange darken-4 pulse tooltipped" data-position="left" data-tooltip="Datos para pruebas" href="#datos-pruebas">
-        <i class="large material-icons">help_outline</i>
-      </a>
-    </div>
+  @if(!Request::is('contacto'))
+  <footer class="page-footer teal darken-2">
     <div class="container">
       <div class="row">
         <div class="col s12 l6">
-          <h5 class="white-text">Ayuda a crecer a anayzquierdo.com</h5>
+          <h5 class="white-text"><small>Ayuda a crecer a</small> anayzquierdo.com</h5>
           <p class="grey-text text-lighten-4">Cualquier petición, comentario y/o sugerencia</p>
           <a href="{{ route('contacto') }}" class="btn teal darken-3 waves-effect waves-light">Contacta</a>
         </div>
-        <div class="col s12 l4 offset-l2">
-        <br>
-        <div class="divider hide-on-large-only"></div>
+
+        {{-- <div class="col s12 l4 offset-l2">
+          <div class="divider hide-on-large-only"></div>
           <h5 class="white-text">Links</h5>
-          <ul>
-            <li>
-              <a class="grey-text text-lighten-3" href="{{ url('sitemap.html') }}">Mapa del sitio</a>
-            </li>
-            <li><a class="grey-text text-lighten-3" href="#!">...</a></li>
-          </ul>
-        </div>
+        </div> --}}
       </div>
     </div>
     <div class="footer-copyright">
@@ -132,58 +123,8 @@
         </span>
       </div>
     </div>
-    <div id="datos-pruebas" class="modal bottom-sheet">
-      <div class="modal-content">
-        <ul class="collapsible popout" data-collapsible="accordion">
-          <li>
-            <div class="collapsible-header teal white-text">Administrador</div>
-            <div class="collapsible-body">
-              <p class="cabecera teal darken-3 white-text">Usuario</p>
-              <p>dani@mail.com</p>
-              <p class="cabecera teal darken-3 white-text">Contraseña</p>
-              <p>daniel</p>
-            </div>
-          </li>
-          <li>
-            <div class="collapsible-header teal white-text">Cliente activado</div>
-            <div class="collapsible-body">
-              <p class="cabecera teal darken-3 white-text">Usuario</p>
-              <p>costa.ivan@hotmail.es</p>
-              <p class="cabecera teal darken-3 white-text">Contraseña</p>
-              <p>bruno</p>
-            </div>
-          </li>
-          <li>
-            <div class="collapsible-header teal white-text">Cliente no activado</div>
-            <div class="collapsible-body">
-              <p class="cabecera teal darken-3 white-text">Usuario</p>
-              <p>alba.armenta@terra.com</p>
-              <p class="cabecera teal darken-3 white-text">Contraseña</p>
-              <p>aroa</p>
-            </div>
-          </li>
-          <li>
-            <div class="collapsible-header teal white-text">Cliente bloqueado</div>
-            <div class="collapsible-body">
-              <p class="cabecera teal darken-3 white-text">Usuario</p>
-              <p>yeray.heredia@saavedra.org</p>
-              <p class="cabecera teal darken-3 white-text">Contraseña</p>
-              <p>sara</p>
-            </div>
-          </li>
-          <li>
-            <div class="collapsible-header teal white-text">Cuenta PayPal</div>
-            <div class="collapsible-body">
-              <p class="cabecera teal darken-3 white-text">Usuario</p>
-              <p>nous-buyer-1@hotmail.es</p>
-              <p class="cabecera teal darken-3 white-text">Contraseña</p>
-              <p>anayzquierdo</p>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
   </footer>
+  @endif
 
   <!--  Scripts -->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>

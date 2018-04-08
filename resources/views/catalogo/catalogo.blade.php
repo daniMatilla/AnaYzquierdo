@@ -8,5 +8,5 @@
   </div>
   @endforeach
 </div>    
-@include('parciales.paginacion')
+{{-- @include('parciales.paginacion') --}}
 @endsection

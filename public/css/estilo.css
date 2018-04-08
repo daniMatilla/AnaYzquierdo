@@ -1,5 +1,7 @@
 /* NAV **********************/
-#logo span, .parallax-container h1 span {
+
+#logo span,
+.parallax-container h1 span {
   position: absolute;
   left: -3000px;
 }
@@ -17,6 +19,7 @@ nav {
 }
 
 /* HEADER **********************/
+
 .header {
   font-weight: 300;
 }
@@ -33,18 +36,22 @@ nav {
   position: absolute;
   bottom: 0;
   left: 50%;
-  -ms-transform: translateX(-50%); /* IE 9 */
-  -webkit-transform: translateX(-50%); /* Chrome, Safari, Opera */
+  -ms-transform: translateX(-50%);
+  /* IE 9 */
+  -webkit-transform: translateX(-50%);
+  /* Chrome, Safari, Opera */
   transform: translateX(-50%);
 }
 
 /*BODY **********************/
+
 body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
 }
-noscript{
+
+noscript {
   position: absolute;
   width: 100%;
   left: 50%;
@@ -61,20 +68,21 @@ h1 {
   font-weight: 400;
 }
 
-footer .collapsible-body p:nth-child(odd){
+footer .collapsible-body p:nth-child(odd) {
   padding: .5rem;
 }
 
-footer .collapsible-body p:nth-child(even){
+footer .collapsible-body p:nth-child(even) {
   font-size: 1.2rem;
   padding-left: 2rem;
 }
 
-#bienvenida h1, #ver h1 {
+#bienvenida h1,
+#ver h1 {
   text-shadow: 0px 3px 6px black;
 }
 
-.emoji{
+.emoji {
   height: 2rem !important;
   margin: 0 0 0 .7rem !important;
   background: none !important;
@@ -82,6 +90,7 @@ footer .collapsible-body p:nth-child(even){
 }
 
 /*CATALOGO **********************/
+
 .espaciado-top {
   padding-top: 6rem !important;
 }
@@ -91,7 +100,7 @@ footer .collapsible-body p:nth-child(even){
 }
 
 .contenido-catalogo {
-  padding-top: 16rem !important; 
+  /* padding-top: 16rem !important;  */
 }
 
 .contenido-admin-usuarios {
@@ -111,6 +120,7 @@ footer .collapsible-body p:nth-child(even){
 }
 
 /* TARJETAS **********************/
+
 .card-title {
   bottom: 10px !important;
 }
@@ -139,7 +149,7 @@ footer .collapsible-body p:nth-child(even){
   cursor: auto;
 }
 
-.halfway-fab-catalogo{  
+.halfway-fab-catalogo {
   position: absolute;
   right: 10px;
   bottom: 10px;
@@ -177,54 +187,79 @@ footer .collapsible-body p:nth-child(even){
 }
 
 /* VER OBRA **********************/
-.datos-obra{
+
+.datos-obra {
   position: relative;
 }
 
-#vendida-obra{
- margin-left: 0; 
+#vendida-obra {
+  margin-left: 0;
 }
 
-.titulo-obra{
+.titulo-obra {
   text-transform: capitalize;
   margin-top: 2rem;
   margin-bottom: 2rem;
   color: #bdbdbd;
 }
 
-.modal-content .chip{
+.modal-content .chip {
   /*height: 6rem;*/
   margin-left: 20px
 }
 
-.modal-content .chip img{
+.modal-content .chip img {
   height: 5rem;
   width: 5rem;
   position: relative;
   left: -20px;
 }
 
-.modal-content .chip a{
+.modal-content .chip a {
   font-size: 1.3rem;
   color: #009688;
 }
 
 /* CARRITO **********************/
+
 .carrito img {
   height: 50px;
 }
 
 /* ADMIN. PEDIDOS **********************/
+
 #tbodyDetalle img {
   height: 50px;
 }
 
 /* ADMIN. OBRAS **********************/
+
 #tbodyObras img {
   height: 50px;
 }
-.vendida{
+
+.vendida {
   float: left !important;
   margin-left: 0px !important;
+}
+
+/* CONTACTO **********************/
+.card-image img{
+  position: absolute;
+  transform: scale(2);
+}
+
+.icon{
+  font-size: 1.5rem;
+}
+
+.collection a{
+  font-weight: bold;
+  font-size: 1.2rem;
+  text-decoration: none !important;
+  color: grey !important;
+}
+.collection a:hover .icon{
+  color: teal !important;
 
 }
